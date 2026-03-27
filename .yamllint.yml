@@ -1,5 +1,8 @@
 extends: default
 
+ignore: |
+  infrastructure/helm/**/templates/*.yaml
+
 rules:
   line-length:
     max: 180
