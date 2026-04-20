@@ -1,0 +1,10 @@
+/home/pierreandre/Documents/Archi_Distrib/Projet/archi-distribue/services/gateway/src/main/java/fr/univrouen/gateway/GatewayApplication.java
+/home/pierreandre/Documents/Archi_Distrib/Projet/archi-distribue/services/gateway/src/main/java/fr/univrouen/gateway/config/AuthorizationHeaderInterceptor.java
+/home/pierreandre/Documents/Archi_Distrib/Projet/archi-distribue/services/gateway/src/main/java/fr/univrouen/gateway/config/GatewayProperties.java
+/home/pierreandre/Documents/Archi_Distrib/Projet/archi-distribue/services/gateway/src/main/java/fr/univrouen/gateway/config/SecurityConfig.java
+/home/pierreandre/Documents/Archi_Distrib/Projet/archi-distribue/services/gateway/src/main/java/fr/univrouen/gateway/downstream/DownstreamGraphqlClient.java
+/home/pierreandre/Documents/Archi_Distrib/Projet/archi-distribue/services/gateway/src/main/java/fr/univrouen/gateway/graphql/GatewayQueryResolver.java
+/home/pierreandre/Documents/Archi_Distrib/Projet/archi-distribue/services/gateway/src/main/java/fr/univrouen/gateway/graphql/model/DriverView.java
+/home/pierreandre/Documents/Archi_Distrib/Projet/archi-distribue/services/gateway/src/main/java/fr/univrouen/gateway/graphql/model/InterventionView.java
+/home/pierreandre/Documents/Archi_Distrib/Projet/archi-distribue/services/gateway/src/main/java/fr/univrouen/gateway/graphql/model/LicenseView.java
+/home/pierreandre/Documents/Archi_Distrib/Projet/archi-distribue/services/gateway/src/main/java/fr/univrouen/gateway/graphql/model/VehicleView.java

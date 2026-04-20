@@ -5,7 +5,7 @@ info:
   description: API REST du microservice Événements (historique des événements liés aux véhicules)
 
 servers:
-  - url: http://event-service:3000
+  - url: http://evenements-service:8084
 
 paths:
   /events:

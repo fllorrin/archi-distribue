@@ -1,12 +1,14 @@
 package fr.univrouen.maintenance.intervention.messaging;
 
 import fr.univrouen.maintenance.intervention.service.InterventionService;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnProperty(name = "app.kafka.enabled", havingValue = "true", matchIfMissing = true)
 public class VehicleEventConsumer {
 
     private final InterventionService interventionService;

@@ -542,6 +542,99 @@ spec:
           {{- end }}
 {{- end }}
 {{- end }}
+{{- if .Values.evenementsService.enabled }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: evenements-service
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: {{ .Values.evenementsService.replicas }}
+  selector:
+    matchLabels:
+      app: evenements-service
+  template:
+    metadata:
+      labels:
+        app: evenements-service
+    spec:
+      containers:
+        - name: evenements-service
+          image: {{ .Values.evenementsService.image }}
+          imagePullPolicy: {{ .Values.evenementsService.imagePullPolicy }}
+          env:
+            - name: SERVER_PORT
+              value: {{ .Values.evenementsService.service.targetPort | quote }}
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://{{ .Values.evenementsService.database.host }}:{{ .Values.evenementsService.database.port }}/{{ .Values.evenementsService.database.name }}
+            - name: SPRING_DATASOURCE_USERNAME
+              value: {{ .Values.evenementsService.database.user }}
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: {{ .Values.evenementsService.database.password }}
+            - name: KAFKA_ENABLED
+              value: {{ .Values.evenementsService.kafka.enabled | quote }}
+            - name: SPRING_KAFKA_BOOTSTRAP_SERVERS
+              value: {{ .Values.evenementsService.kafka.bootstrapServers }}
+            - name: SPRING_KAFKA_CONSUMER_BOOTSTRAP_SERVERS
+              value: {{ .Values.evenementsService.kafka.bootstrapServers }}
+            - name: KAFKA_TOPIC_VEHICLE
+              value: {{ .Values.evenementsService.kafka.topicVehicle }}
+            - name: KAFKA_GROUP_ID
+              value: {{ .Values.evenementsService.kafka.groupId }}
+            - name: APP_SECURITY_ENABLED
+              value: {{ .Values.evenementsService.security.enabled | quote }}
+            - name: JWT_ISSUER_URI
+              value: {{ .Values.evenementsService.security.jwtIssuerUri }}
+          ports:
+            - containerPort: {{ .Values.evenementsService.service.targetPort }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: evenements-service
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    app: evenements-service
+  ports:
+    - port: {{ .Values.evenementsService.service.port }}
+      targetPort: {{ .Values.evenementsService.service.targetPort }}
+{{- if .Values.evenementsService.ingress.enabled }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: evenements-ingress
+  namespace: {{ .Values.namespace }}
+  {{- with .Values.evenementsService.ingress.annotations }}
+  annotations:
+{{ toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.evenementsService.ingress.className }}
+  rules:
+    - host: {{ .Values.evenementsService.ingress.host }}
+      http:
+        paths:
+          - path: {{ .Values.evenementsService.ingress.path }}
+            pathType: {{ .Values.evenementsService.ingress.pathType }}
+            backend:
+              service:
+                name: evenements-service
+                port:
+                  number: {{ .Values.evenementsService.service.port }}
+          {{- if .Values.evenementsService.ingress.restPath }}
+          - path: {{ .Values.evenementsService.ingress.restPath }}
+            pathType: {{ .Values.evenementsService.ingress.pathType }}
+            backend:
+              service:
+                name: evenements-service
+                port:
+                  number: {{ .Values.evenementsService.service.port }}
+          {{- end }}
+{{- end }}
+{{- end }}
 {{- if .Values.gatewayService.enabled }}
 ---
 apiVersion: apps/v1
@@ -659,6 +752,13 @@ spec:
               value: {{ .Values.keycloak.db.user }}
             - name: KC_DB_PASSWORD
               value: {{ .Values.keycloak.db.password }}
+            {{- with .Values.keycloak.extraEnv }}
+{{ toYaml . | nindent 12 }}
+            {{- end }}
+          {{- with .Values.keycloak.resources }}
+          resources:
+{{ toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: 8080
           volumeMounts:

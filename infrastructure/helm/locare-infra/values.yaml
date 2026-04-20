@@ -14,6 +14,16 @@ keycloak:
   adminUser: admin
   adminPassword: admin
   realmFile: files/LoCarE-realm.json
+  extraEnv:
+    - name: JAVA_OPTS_KC_HEAP
+      value: -XX:MaxRAMPercentage=55 -XX:InitialRAMPercentage=30 -XX:MaxMetaspaceSize=256m
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: "1"
+      memory: 1024Mi
   db:
     host: postgres-keycloak
     name: keycloak
@@ -148,6 +158,37 @@ maintenanceService:
     groupId: maintenance-service
     retryIntervalMs: 1000
     retryMaxAttempts: 2
+  security:
+    enabled: true
+    jwtIssuerUri: http://keycloak:8080/realms/LoCarE
+
+evenementsService:
+  enabled: true
+  image: locare-evenements:dev
+  imagePullPolicy: IfNotPresent
+  replicas: 1
+  service:
+    port: 8084
+    targetPort: 8084
+  ingress:
+    enabled: false
+    className: traefik
+    host: evenements.api.locare.local
+    path: /graphql
+    restPath: /events
+    pathType: Prefix
+    annotations: {}
+  database:
+    host: postgres-evenements
+    port: 5432
+    name: evenements
+    user: evenements
+    password: evenements
+  kafka:
+    enabled: true
+    bootstrapServers: kafka:9092
+    topicVehicle: vehicule_topic
+    groupId: evenements-service
   security:
     enabled: true
     jwtIssuerUri: http://keycloak:8080/realms/LoCarE

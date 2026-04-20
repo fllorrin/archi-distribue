@@ -4,7 +4,8 @@ WORKDIR /app
 
 COPY pom.xml ./
 COPY src ./src
-RUN mvn -q -DskipTests clean package
+RUN mvn -q -DskipTests -Dspring-boot.build-image.skip=true clean package
+
 
 FROM eclipse-temurin:21-jre-alpine AS runtime
 WORKDIR /app

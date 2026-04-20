@@ -1,0 +1,16 @@
+type Event {
+  id: ID!
+  vehicle_id: ID!
+  time: String!
+  event: String!
+}
+
+type Query {
+  events(vehicle_id: ID, event: String): [Event!]
+  event(id: ID!): Event
+}
+
+type Mutation {
+  createEvent(vehicle_id: ID!, time: String!, event: String!): Event
+  deleteEvent(id: ID!): Boolean
+}

@@ -7,7 +7,6 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -72,7 +71,6 @@ public class KafkaListenerConfig {
 
         @Bean(name = "kafkaListenerContainerFactory")
         @ConditionalOnMissingBean(name = "kafkaListenerContainerFactory")
-        @ConditionalOnBean({ConsumerFactory.class, DefaultErrorHandler.class})
         ConcurrentKafkaListenerContainerFactory<Object, Object> kafkaListenerContainerFactory(
                         ConsumerFactory<Object, Object> consumerFactory,
                         DefaultErrorHandler kafkaErrorHandler
